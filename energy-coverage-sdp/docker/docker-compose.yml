@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  spark:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../src:/app/src
+      - ../backend:/app/backend
+    environment:
+      - SPARK_MASTER=local[*]
+    command: ["spark-submit", "/app/src/main.py"]
+
+  duckdb:
+    image: duckdb/duckdb
+    volumes:
+      - duckdb_data:/data
+    environment:
+      - DUCKDB_DATABASE=/data/mydatabase.duckdb
+
+volumes:
+  duckdb_data:
